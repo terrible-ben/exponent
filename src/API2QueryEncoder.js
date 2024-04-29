@@ -86,11 +86,6 @@ export default class API2QueryEncoder {
         return this;
     }
 
-    setParameter(key, value) {
-        this.encoded += `${key}=${value}^`;
-        return this;
-    }
-
     build() {
         return this.encoded;
     }
