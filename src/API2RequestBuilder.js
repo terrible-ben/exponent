@@ -42,19 +42,32 @@ export default class API2RequestBuilder {
     return this.request;
   }
   async makeRequest(method, path, body = null) {
-    try {
-      const response = await axios({
-        method: method,
-        url: `${this.baseURL}/${path}`,
-        headers: this.headers,
-        params: this.params,
-        data: body,
-      });
-      return this.decodeResponse(response);
-    } catch (error) {
-      console.error('Request failed:', error);
-      throw error;
+    if (!this.request) {
+      throw new Error('Request not initialized');
     }
+
+    const url = this.request.baseURL + path;
+    const config = {
+      headers: this.request.headers,
+      params: this.request.params,
+    };
+
+    let response;
+    try {
+      if (method === 'get') {
+        response = await axios.get(url, config);
+      } else if (method === 'post') {
+        response = await axios.post(url, body, config);
+      } else {
+        throw new Error(`Unsupported method: ${method}`);
+      }
+    } catch (error) {
+      // Handle errors here
+      console.error(error);
+      return null;
+    }
+
+    return this.decodeResponse(response);
   }
 
   async get(path) {
@@ -68,6 +81,7 @@ export default class API2RequestBuilder {
   // Implement put, delete, etc., similarly
 
   decodeResponse(response) {
-    return response.data; // Customize this method as needed based on your API's response structure
+    // Implement response decoding here
+    return response;
   }
 }

@@ -61,7 +61,7 @@ export default class API2QueryEncoder {
     setGroupedBy(columns) {
         if (Array.isArray(columns)) {
             columns = columns.join('$');
-            console.error(columns);
+            // console.error(columns);
         }
         this.encoded += `groupedBy=${columns}^`;
         return this;
