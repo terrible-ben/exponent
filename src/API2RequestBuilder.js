@@ -62,7 +62,7 @@ export default class API2RequestBuilder {
         throw new Error(`Unsupported method: ${method}`);
       }
     } catch (error) {
-      // Handle errors here
+      // Handle errors here 
       console.error(error);
       return null;
     }
@@ -82,6 +82,7 @@ export default class API2RequestBuilder {
 
   decodeResponse(response) {
     // Implement response decoding here
-    return response;
+    // return only the data and the status code
+    return response.data;
   }
 }

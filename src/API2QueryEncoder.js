@@ -91,7 +91,7 @@ export default class API2QueryEncoder {
     }
 
     encode() {
-        return encodeURIComponent(this.encoded);
+        return this.encoded;
     }
     
     async decode(request = {
