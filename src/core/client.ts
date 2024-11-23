@@ -21,10 +21,10 @@ class APIClient {
     });
   }
 
-  public setToken(token: string) {
-    this.httpClient.defaults.headers.Authorization = `Bearer ${token}`;
+  public getConfig() {
+    return Config.getInstance();
   }
-  
+
   async request<T>(method: string, url: string, data?: any): Promise<T> {
     try {
       const response = await this.httpClient.request<T>({ method, url, data });

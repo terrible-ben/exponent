@@ -52,14 +52,6 @@ export interface UserRoles {
     role_id: string
 }
 
-export interface Username {
-    username: string
-}
-
-export interface Email {
-    email: string
-}
-
 export interface RoleRegistrable {
     registrable: boolean
 }
@@ -93,7 +85,7 @@ export interface PasswordResetToken {
 }
 
 
-export interface LoginResponse {
+export interface AuthData {
     data: {
         token: string,
         permissions: [{
@@ -121,13 +113,22 @@ export class AuthAPI {
     constructor(private client: API2Client) {}
 
     setToken(token: string) {
-        this.client.setToken(token);
+        const config = this.client.getConfig();
+        config.set('apiKey', token);
     }
 
-    login(username: Username, password: Password) {
-        const auth =  this.client.request('POST', '/api/v1/authentication/identity/callback', { user: {username, password}}).then((response: unknown) => {
-            const loginResponse = response as LoginResponse;
-            this.setToken(loginResponse.data.token);
+    login(email: string, password: string) {
+        const payload = {
+            user: {
+                email,
+                password
+            }
+        }
+        const auth =  this.client.request('POST', '/api/v1/authentication/identity/callback', payload).then((response: any) => {
+            const result = response.data as AuthData;
+            const token = result.token;
+
+            this.setToken(token);   
             return response;
         });
         return auth;
